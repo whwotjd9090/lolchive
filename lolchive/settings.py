@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 import json
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,14 +30,16 @@ def get_secret(keyname: str, secret=secret_key_data) -> str:
     try:
         return secret[keyname]
     except:
-        raise ImproperlyConfigured(f'Set secret {keyname} environment variable.')
+        raise ImproperlyConfigured(f'Set secrets.json {keyname} environment variable.')
 
 SECRET_KEY = get_secret('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'ec2-3-39-79-14.ap-northeast-2.compute.amazonaws.com',
+]
 
 
 # Application definition
@@ -86,8 +89,12 @@ WSGI_APPLICATION = 'lolchive.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'lolchive-postgresql-01.cszu70zprzdv.ap-northeast-2.rds.amazonaws.com',
+        'PORT': '5432',
+        'NAME': 'postgres',
+        'USER': 'lolchive_mgr',
+        'PASSWORD': get_secret('POSTGRESQL_PASSWORD'),
     }
 }
 
@@ -114,9 +121,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-KR'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
