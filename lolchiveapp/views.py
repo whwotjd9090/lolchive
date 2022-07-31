@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
-    return HttpResponse("Hello, world. You're at the lolchiveapp index")
+    return render(request, 'index.html')
 
-def replay_update(request):
-    return HttpResponse('Hello! This is replay update page.')
+def replays(request):
+    return render(request, 'replays.html')
